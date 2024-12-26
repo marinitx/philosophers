@@ -19,8 +19,8 @@ typedef struct s_table t_table;
 //FORK
 typedef struct s_fork
 {
-    int fork_id;
-    type_mtx fork;
+    int fork_id; //esto es el número de tenedor
+    type_mtx fork_mtx; //esto es el candadito de cada tenedor (lo que hay que inicializar)
 }   t_fork;
 
 
@@ -31,7 +31,7 @@ typedef struct s_philo
     pthread_t   thread_id; //each philo is a thread
     t_fork  *left_fork;
     t_fork  *right_fork;
-    long    num_meals;
+    long    meals_eaten;
     bool    full;
     long    last_meal; //time passed from last meal
     t_table *table;
@@ -47,17 +47,20 @@ struct s_table
     long    min_meals; //optional
     long    start;
     bool    end; //philo died or all are full
-    t_fork  *forks; //array to forks
+    t_fork  *forks; //array to forks para cada fork hay una struct de forks
     t_philo *philos; //array to philos
 };
 
 /* MAIN FUNCTIONS */
 void var_init(char **argv, t_table *table);
 int check_args(char **argv);
+void init_mutex(t_table *table);
+void init_philos(t_table *table);
 
 /* utils functions */
 long ft_atol(const char *str);
 int    error_and_exit(const char *error);
 int	ft_isdigit(int a);
+long long get_time(void);
 
 #endif

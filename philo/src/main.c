@@ -7,7 +7,7 @@
 // is it a number?
 // not > INT_MAX
 // timestamps > 60ms
-// error en >200 filósofos??
+// en el subject pone no más de 200 philos
 int check_args(char **argv)
 {
 	int i;
@@ -54,7 +54,9 @@ int main(int argc, char **argv)
 		//parsing and filling a table
 		check_args(argv);
 		var_init(argv, &table);
+		init_mutex(&table);
 		//initing philos
+		init_philos(&table);
 		//dinner
 		//clean if a philo dies or all philos are full
 	}
