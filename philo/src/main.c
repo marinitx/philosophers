@@ -24,6 +24,8 @@ int check_args(char **argv)
 		{
 			if (!ft_isdigit(argv[i][j]) || ft_atol(argv[i]) == 0)
 			{
+				printf("%ld\n", ft_atol(argv[i]));
+				printf("%d\n", ft_isdigit(argv[i][j]));
 				if (ft_atol(argv[i]) == 0 && i == 5)
 					return (0);
 				error_and_exit("2Wrong input");

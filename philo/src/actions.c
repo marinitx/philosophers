@@ -2,6 +2,8 @@
 //Definir las acciones que llevan a cabo todos los filósofos
 // Comer, dormir, pensar
 
+void    *philo_routine();
+
 /*
 think(philo)
 take_forks(philo)

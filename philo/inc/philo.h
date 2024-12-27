@@ -56,6 +56,8 @@ void var_init(char **argv, t_table *table);
 int check_args(char **argv);
 void init_mutex(t_table *table);
 void init_philos(t_table *table);
+void start_simulation(t_table *table);
+void *philo_routine();
 
 /* utils functions */
 long ft_atol(const char *str);

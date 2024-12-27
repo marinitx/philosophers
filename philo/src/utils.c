@@ -20,6 +20,7 @@ long long get_time(void)
 
 int	ft_isdigit(int a)
 {
+    printf("es digito? %d\n", a);
 	if (a > 47 && a < 58)
 		return (1);
 	else
@@ -38,7 +39,7 @@ long ft_atol(const char *str)
     if (*str == '-' || *str == '+')
         if (*str++ == '-')
             sign = -1;
-    while (*str >= '0' && *str <= '9')
+    while (*str >= '0' && *str <= '9' && *str)
     {
         num = num * 10;
         num = num + (*str - '0');

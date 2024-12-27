@@ -30,7 +30,7 @@ void init_mutex(t_table *table)
 			//destroy mutex
 		i++;
 	}
-
+	printf("yujuuu mutex iniciado\n");
 }
 
 void init_philos(t_table *table)
@@ -47,8 +47,8 @@ void init_philos(t_table *table)
 	//asignar id a cada uno
 		table->philos[i].id = i;
 	//asignar tenedor izq = i y derecho = i+1 a cada uno
-		table->philos[i].left_fork->fork_id = i;
-		table->philos[i].right_fork->fork_id = i + 1;
+    	table->philos[i].left_fork = &table->forks[i];
+    	table->philos[i].right_fork = &table->forks[(i + 1) % table->num_philo];
 	//establecer meals_eaten (ninguna porque no han comido)
 		table->philos[i].meals_eaten = 0;
 	//establecer last_meal a start
@@ -56,7 +56,8 @@ void init_philos(t_table *table)
 	//establecer full a false al principio
 		table->philos[i].full = false;
 	//asociar un hilo pthread_create a cada filósofo
-		//philo_routine();
+		start_simulation(table);
 		i++;
 	}
+	printf("yujuuu philos iniciado\n");
 }
