@@ -29,8 +29,8 @@ typedef struct s_philo
 {
     int     id;
     pthread_t   thread_id; //each philo is a thread
-    t_fork  *left_fork;
-    t_fork  *right_fork;
+    t_fork  *first_fork;
+    t_fork  *second_fork;
     long    meals_eaten;
     bool    full;
     long    last_meal; //time passed from last meal
@@ -57,7 +57,8 @@ int check_args(char **argv);
 void init_mutex(t_table *table);
 void init_philos(t_table *table);
 void start_simulation(t_table *table);
-void *philo_routine();
+void *philo_routine(void *arg);
+void    *life_check(void *arg);
 
 /* utils functions */
 long ft_atol(const char *str);

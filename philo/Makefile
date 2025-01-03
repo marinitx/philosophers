@@ -6,7 +6,7 @@ CFLAGS = -Wall -Wextra -Werror -g3 #-fsanitize=thread
 
 SRC_DIR = ./src
 
-SRCS = main.c init.c utils.c
+SRCS = main.c init.c utils.c philosophers.c actions.c
 
 OBJS = $(addprefix $(SRC_DIR)/, $(SRCS:.c=.o))
 

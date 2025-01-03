@@ -45,10 +45,19 @@ void init_philos(t_table *table)
 	while (i < table->num_philo)
 	{
 	//asignar id a cada uno
-		table->philos[i].id = i;
-	//asignar tenedor izq = i y derecho = i+1 a cada uno
-    	table->philos[i].left_fork = &table->forks[i];
-    	table->philos[i].right_fork = &table->forks[(i + 1) % table->num_philo];
+		table->philos[i].id = i + 1;
+	//asignar tenedores
+		if (table->philos[i].id % 2 == 0)
+    	{
+			table->philos[i].first_fork = &table->forks[i];
+			table->philos[i].second_fork = &table->forks[(i + 1) % table->num_philo];
+		}
+		else
+		{
+			table->philos[i].first_fork = &table->forks[(i + 1) % table->num_philo];
+			table->philos[i].second_fork = &table->forks[i];
+		}
+		printf("filósofo numero %d\n, primer tenedor %p\n segundo tenedor%p\n", table->philos[i].id, table->philos[i].first_fork, table->philos[i].second_fork);
 	//establecer meals_eaten (ninguna porque no han comido)
 		table->philos[i].meals_eaten = 0;
 	//establecer last_meal a start
@@ -56,8 +65,8 @@ void init_philos(t_table *table)
 	//establecer full a false al principio
 		table->philos[i].full = false;
 	//asociar un hilo pthread_create a cada filósofo
-		start_simulation(table);
 		i++;
 	}
+	start_simulation(table);
 	printf("yujuuu philos iniciado\n");
 }
