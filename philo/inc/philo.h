@@ -46,7 +46,7 @@ struct s_table
     long    time_die;
     long    min_meals; //optional
     long    start;
-    bool    end; //philo died or all are full
+    bool    end; //philo died or all are full bandera
     t_fork  *forks; //array to forks para cada fork hay una struct de forks
     t_philo *philos; //array to philos
 };
@@ -59,11 +59,17 @@ void init_philos(t_table *table);
 void start_simulation(t_table *table);
 void *philo_routine(void *arg);
 void    *life_check(void *arg);
+int	isdead(t_philo *philo);
 
 /* utils functions */
 long ft_atol(const char *str);
 int    error_and_exit(const char *error);
 int	ft_isdigit(int a);
 long long get_time(void);
+
+/* actions functions */
+void    ft_think(t_philo *philo);
+void    ft_eat(t_philo *philo);
+void    ft_sleep(t_philo *philo);
 
 #endif

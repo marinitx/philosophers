@@ -60,6 +60,7 @@ int main(int argc, char **argv)
 		//initing philos
 		init_philos(&table);
 		//dinner
+		start_simulation(&table);
 		//clean if a philo dies or all philos are full
 	}
 	else

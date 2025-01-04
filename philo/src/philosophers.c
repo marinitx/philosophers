@@ -43,11 +43,33 @@ void start_simulation(t_table *table)
 		{
 			if (pthread_join(table->philos[i].thread_id, NULL) != 0)
 				printf("cambiar esto");
-				i++;
+			i++;
 		}
 	// }
 	printf("joojojo\n");
 	return ;
+}
+
+//función para comprobar si está o no muerto
+int	isdead(t_philo *philo)
+{
+	t_table *table;
+	long long time;
+	//aquí tendría que hacer simplemente mirar si está end en 1 o en 0 continuamente
+	//es el monitor el que tiene que comprobar si se ha muerto por inanicion
+	table = philo->table; //así puedo obtener la propia mesa desde el filósofo
+	if (!table)
+    {
+        printf("Error: table pointer is NULL\n");
+        return 1;
+    }
+	time = get_time();
+	if ((time - philo->last_meal) > table->time_die)
+	{
+		printf("toi muerto\n");
+		return 1;
+	}
+	return 0;
 }
 /*
 while simulation is running perform actions(philosopher id)

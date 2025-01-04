@@ -11,6 +11,7 @@ void var_init(char **argv, t_table *table)
 	else
 		table->min_meals = 0;
 	printf("%ld\n", table->num_philo);
+	printf("tiempo para morir %ld\n", table->time_die);
 }
 
 void init_mutex(t_table *table)
@@ -64,9 +65,9 @@ void init_philos(t_table *table)
 		table->philos[i].last_meal = get_time();
 	//establecer full a false al principio
 		table->philos[i].full = false;
-	//asociar un hilo pthread_create a cada filósofo
+	//asignar la referencia a la mesa principal
+		table->philos[i].table = table;
 		i++;
 	}
-	start_simulation(table);
 	printf("yujuuu philos iniciado\n");
 }
