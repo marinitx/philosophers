@@ -4,7 +4,7 @@
 #include <unistd.h>
 #include <stdio.h>
 #include <pthread.h> // mutex: init destroy lock unlock
-                    // threads: create join detach
+					// threads: create join detach
 #include <stdlib.h>
 #include <stdbool.h>
 #include <sys/time.h> // gettimeofday
@@ -19,36 +19,41 @@ typedef struct s_table t_table;
 //FORK
 typedef struct s_fork
 {
-    int fork_id; //esto es el número de tenedor
-    type_mtx fork_mtx; //esto es el candadito de cada tenedor (lo que hay que inicializar)
+	int fork_id; //esto es el número de tenedor
+	type_mtx fork_mtx; //esto es el candadito de cada tenedor (lo que hay que inicializar)
 }   t_fork;
 
 
 // PHILO
 typedef struct s_philo
 {
-    int     id;
-    pthread_t   thread_id; //each philo is a thread
-    t_fork  *first_fork;
-    t_fork  *second_fork;
-    long    meals_eaten;
-    bool    full;
-    long    last_meal; //time passed from last meal
-    t_table *table;
+	int     id;
+	pthread_t   thread_id; //each philo is a thread
+	t_fork  *first_fork;
+	t_fork  *second_fork;
+	long    meals_eaten;
+	long    last_meal; //time passed from last meal
+	type_mtx *deadlock;
+	type_mtx *printlock;
+	type_mtx *meallock;
+	t_table *table;
 
 } t_philo;
 
 struct s_table
 {
-    long    num_philo;
-    long    time_eat;
-    long    time_sleep;
-    long    time_die;
-    long    min_meals; //optional
-    long    start;
-    bool    end; //philo died or all are full bandera
-    t_fork  *forks; //array to forks para cada fork hay una struct de forks
-    t_philo *philos; //array to philos
+	long    num_philo;
+	long    time_eat;
+	long    time_sleep;
+	long    time_die;
+	long    min_meals; //optional
+	long    start;
+	bool    end; //philo died or all are full bandera 0 es que están vivos y 1 están muertos
+	type_mtx printlock;
+	type_mtx deadlock;
+	type_mtx meallock;
+	t_fork  *forks; //array to forks para cada fork hay una struct de forks
+	t_philo *philos; //array to philos
 };
 
 /* MAIN FUNCTIONS */
@@ -66,6 +71,8 @@ long ft_atol(const char *str);
 int    error_and_exit(const char *error);
 int	ft_isdigit(int a);
 long long get_time(void);
+int	my_usleep(size_t ms);
+void    print_status(t_philo *philo, char *msg);
 
 /* actions functions */
 void    ft_think(t_philo *philo);

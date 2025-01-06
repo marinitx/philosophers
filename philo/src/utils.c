@@ -53,3 +53,21 @@ int    error_and_exit(const char *error)
     printf("%s\n", error);
     exit (1);
 }
+
+int	my_usleep(size_t ms)
+{
+	size_t	start;
+
+	start = get_time();
+	while ((get_time() - start) < ms)
+		usleep(500);
+	return (0);
+}
+
+void print_status(t_philo *philo, char *msg)
+{
+    pthread_mutex_lock(philo->printlock);
+    if (!isdead(philo))
+        printf("%lld %d %s\n", get_time() - philo->table->start, philo->id, msg);
+    pthread_mutex_unlock(philo->printlock);
+}

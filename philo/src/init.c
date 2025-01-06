@@ -34,11 +34,20 @@ void init_mutex(t_table *table)
 	printf("yujuuu mutex iniciado\n");
 }
 
+void data_to_philo(t_table *table, t_philo *philo)
+{
+	philo->deadlock = &table->deadlock;
+	philo->meallock = &table->meallock;
+	philo->printlock = &table->printlock;
+}
+
 void init_philos(t_table *table)
 {
 	int i;
 
 	i = 0;
+	if (pthread_mutex_init(&table->deadlock, NULL) || pthread_mutex_init(&table->meallock, NULL) || pthread_mutex_init(&table->printlock, NULL))
+		printf("Error initialiting mutex");
 	//crear philos
 	table->philos = malloc(sizeof(t_philo) * table->num_philo);
 	if (!table->philos)
@@ -48,8 +57,9 @@ void init_philos(t_table *table)
 	//asignar id a cada uno
 		table->philos[i].id = i + 1;
 	//asignar tenedores
-		if (table->philos[i].id % 2 == 0)
-    	{
+		// En init_philos, modifica la asignación de tenedores
+		if (i % 2 == 0)
+		{
 			table->philos[i].first_fork = &table->forks[i];
 			table->philos[i].second_fork = &table->forks[(i + 1) % table->num_philo];
 		}
@@ -58,16 +68,16 @@ void init_philos(t_table *table)
 			table->philos[i].first_fork = &table->forks[(i + 1) % table->num_philo];
 			table->philos[i].second_fork = &table->forks[i];
 		}
-		printf("filósofo numero %d\n, primer tenedor %p\n segundo tenedor%p\n", table->philos[i].id, table->philos[i].first_fork, table->philos[i].second_fork);
+		printf("filósofo numero %d\n, primer tenedor %d\n segundo tenedor%d\n", table->philos[i].id, table->philos[i].first_fork->fork_id, table->philos[i].second_fork->fork_id);
 	//establecer meals_eaten (ninguna porque no han comido)
 		table->philos[i].meals_eaten = 0;
 	//establecer last_meal a start
 		table->philos[i].last_meal = get_time();
-	//establecer full a false al principio
-		table->philos[i].full = false;
 	//asignar la referencia a la mesa principal
 		table->philos[i].table = table;
+		data_to_philo(table, &table->philos[i]);
 		i++;
 	}
+	table->end = 0;
 	printf("yujuuu philos iniciado\n");
 }
