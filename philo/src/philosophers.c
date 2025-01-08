@@ -15,7 +15,6 @@ void start_simulation(t_table *table)
 
 	i = 0;
 	table->start = get_time();
-	printf("DEBUG: Iniciando simulación\n");
 	// if (table->min_meals == 0)
 	// 	return ; //volver al main y limpiar la mesa
 	// else if (table->num_philo == 1)
@@ -30,8 +29,8 @@ void start_simulation(t_table *table)
 		{
 			if (pthread_create(&table->philos[i].thread_id, NULL, &philo_routine, &table->philos[i]) != 0)
 			{
+				cleanup(table);
 				error_and_exit("Error creating threads");
-				//aquí habrá que eliminar los mutex
 			}
 			i++;
 		}
@@ -39,16 +38,21 @@ void start_simulation(t_table *table)
 		//para que puedan esperarse entre ellos
 		//hay que unir el hilo extra a los filósofos o queee? SÍII
 		if (pthread_join(monitor, NULL) != 0)
-			printf("cambiar esto");
+		{
+			printf("cleanup por monitor join");
+			cleanup(table);
+		}
 		i = 0;
 		while (i < table->num_philo)
 		{
 			if (pthread_join(table->philos[i].thread_id, NULL) != 0)
-				printf("cambiar esto");
+			{
+				printf("cleanup por philo join");
+				cleanup(table);
+			}
 			i++;
 		}
 	// }
-	printf("joojojo\n");
 	return ;
 }
 
@@ -68,95 +72,90 @@ int	isdead(t_philo *philo)
 	return (0);
 }
 
-int	check_death(t_philo *philo)
+int check_death(t_philo *philo)
 {
 	t_table *table;
+	long current_time;
 
-    table = philo->table;
-    if (!table)
-    {
-        printf("Error: table pointer is NULL\n");
-        return 1;
-    }
+	table = philo->table;
+	if (!table)
+		return 1;
+
 	pthread_mutex_lock(philo->deadlock);
 	if (table->end == 1)
 	{
 		pthread_mutex_unlock(philo->deadlock);
 		return 1;
 	}
+	
 	pthread_mutex_lock(philo->meallock);
-	if ((get_time() - philo->last_meal) >= table->time_die)
+	current_time = get_time();
+	if ((current_time - philo->last_meal) >= table->time_die)
 	{
 		pthread_mutex_unlock(philo->meallock);
 		table->end = 1;
+		pthread_mutex_unlock(philo->deadlock);
 		print_status(philo, "died");
 		return 1;
 	}
 	pthread_mutex_unlock(philo->meallock);
 	pthread_mutex_unlock(philo->deadlock);
-    return 0;
+	return 0;
 }
+
 
 int check_meals(t_philo *philo)
 {
-    int count;
-    int i;
-    t_table *table;
+	int count;
+	int i;
+	t_table *table;
 
-    i = 0;
-    count = 0;
-    table = philo->table;
-    if (table->min_meals == 0)
-        return 0;
-    
-    while (i < table->num_philo)
-    {
-        pthread_mutex_lock(philo->meallock);
-        printf("DEBUG: filósofo %d ha comido %ld veces\n", 
-               table->philos[i].id, table->philos[i].meals_eaten);
-        if (table->philos[i].meals_eaten >= table->min_meals)
-            count++;
-        pthread_mutex_unlock(philo->meallock);
-        i++;
-    }
+	i = 0;
+	count = 0;
+	table = philo->table;
+	if (table->min_meals == 0)
+		return 0;
+	
+	while (i < table->num_philo)
+	{
+		pthread_mutex_lock(philo->meallock);
+		if (table->philos[i].meals_eaten >= table->min_meals)
+		{
+			count++;
+			i++;
+		}
+		pthread_mutex_unlock(philo->meallock);
+	}
 
-    printf("DEBUG: conteo total: %d de %ld filósofos han comido %ld veces\n", 
-           count, table->num_philo, table->min_meals);
-
-    if (count == table->num_philo)
-    {
-        pthread_mutex_lock(philo->deadlock);
-        table->end = 1;
-        pthread_mutex_unlock(philo->deadlock);
-        return 1;
-    }
-    return 0;
+	if (count == table->num_philo)
+	{
+		pthread_mutex_lock(philo->deadlock);
+		table->end = 1;
+		pthread_mutex_unlock(philo->deadlock);
+		return 1;
+	}
+	return 0;
 }
 
 void    *life_check(void *arg)
 {
-    t_table *table;
-    int i;
-    static int iterations = 0;
+	t_table *table;
+	int i;
 
-    table = (t_table *) arg;
-    while (1)
-    {
-        i = 0;
-        iterations++;
-        if (iterations % 1000 == 0)
-            printf("DEBUG: vigilante iteración %d\n", iterations);
-            
-        while (i < table->num_philo)
-        {
-            if (check_death(&table->philos[i]) || check_meals(&table->philos[i]))
-            {
-                printf("DEBUG: vigilante detectó fin de simulación!!\n");
-                return NULL;
-            }
-            i++;
-        }
-        usleep(100);
-    }
-    return arg;
+	table = (t_table *) arg;
+	while (1)
+	{
+		i = 0;
+			
+		while (i < table->num_philo)
+		{
+			if (check_death(&table->philos[i]) || check_meals(&table->philos[i]))
+			{
+				return NULL;
+			}
+			i++;
+		}
+		usleep(100);
+	}
+	return arg;
 }

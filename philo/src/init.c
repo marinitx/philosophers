@@ -10,8 +10,6 @@ void var_init(char **argv, t_table *table)
 		table->min_meals = ft_atol(argv[5]);
 	else
 		table->min_meals = 0;
-	printf("%ld\n", table->num_philo);
-	printf("tiempo para morir %ld\n", table->time_die);
 }
 
 void init_mutex(t_table *table)
@@ -27,11 +25,12 @@ void init_mutex(t_table *table)
 	{
 		table->forks[i].fork_id = i;
 		if (pthread_mutex_init(&(table->forks[i].fork_mtx), NULL) != 0)
-			printf("cambiar esto");
-			//destroy mutex
+		{
+			printf("cleanup por iniciar forks");
+			cleanup(table);
+		}
 		i++;
 	}
-	printf("yujuuu mutex iniciado\n");
 }
 
 void data_to_philo(t_table *table, t_philo *philo)
@@ -47,7 +46,10 @@ void init_philos(t_table *table)
 
 	i = 0;
 	if (pthread_mutex_init(&table->deadlock, NULL) || pthread_mutex_init(&table->meallock, NULL) || pthread_mutex_init(&table->printlock, NULL))
-		printf("Error initialiting mutex");
+	{
+		printf("cleanup por iniciar mutex");
+		cleanup(table);
+	}
 	//crear philos
 	table->philos = malloc(sizeof(t_philo) * table->num_philo);
 	if (!table->philos)
@@ -57,7 +59,6 @@ void init_philos(t_table *table)
 	//asignar id a cada uno
 		table->philos[i].id = i + 1;
 	//asignar tenedores
-		// En init_philos, modifica la asignación de tenedores
 		if (i % 2 == 0)
 		{
 			table->philos[i].first_fork = &table->forks[i];
@@ -79,5 +80,4 @@ void init_philos(t_table *table)
 		i++;
 	}
 	table->end = 0;
-	printf("yujuuu philos iniciado\n");
 }

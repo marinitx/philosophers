@@ -62,6 +62,7 @@ int main(int argc, char **argv)
 		//dinner
 		start_simulation(&table);
 		//clean if a philo dies or all philos are full
+		cleanup(&table);
 	}
 	else
 		error_and_exit("1Wrong input");

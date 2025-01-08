@@ -73,6 +73,7 @@ int	ft_isdigit(int a);
 long long get_time(void);
 int	my_usleep(size_t ms);
 void    print_status(t_philo *philo, char *msg);
+void cleanup(t_table *table);
 
 /* actions functions */
 void    ft_think(t_philo *philo);
