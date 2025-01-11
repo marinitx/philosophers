@@ -9,7 +9,7 @@ void var_init(char **argv, t_table *table)
 	if (argv[5])
 		table->min_meals = ft_atol(argv[5]);
 	else
-		table->min_meals = 0;
+		table->min_meals = -1;
 }
 
 void init_mutex(t_table *table)
@@ -25,10 +25,7 @@ void init_mutex(t_table *table)
 	{
 		table->forks[i].fork_id = i;
 		if (pthread_mutex_init(&(table->forks[i].fork_mtx), NULL) != 0)
-		{
-			printf("cleanup por iniciar forks");
 			cleanup(table);
-		}
 		i++;
 	}
 }
@@ -46,10 +43,7 @@ void init_philos(t_table *table)
 
 	i = 0;
 	if (pthread_mutex_init(&table->deadlock, NULL) || pthread_mutex_init(&table->meallock, NULL) || pthread_mutex_init(&table->printlock, NULL))
-	{
-		printf("cleanup por iniciar mutex");
 		cleanup(table);
-	}
 	//crear philos
 	table->philos = malloc(sizeof(t_philo) * table->num_philo);
 	if (!table->philos)
@@ -69,7 +63,6 @@ void init_philos(t_table *table)
 			table->philos[i].first_fork = &table->forks[(i + 1) % table->num_philo];
 			table->philos[i].second_fork = &table->forks[i];
 		}
-		printf("filósofo numero %d\n, primer tenedor %d\n segundo tenedor%d\n", table->philos[i].id, table->philos[i].first_fork->fork_id, table->philos[i].second_fork->fork_id);
 	//establecer meals_eaten (ninguna porque no han comido)
 		table->philos[i].meals_eaten = 0;
 	//establecer last_meal a start

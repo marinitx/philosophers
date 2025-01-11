@@ -22,14 +22,8 @@ int check_args(char **argv)
 		j = 0;
 		while (argv[i][j])
 		{
-			if (!ft_isdigit(argv[i][j]) || ft_atol(argv[i]) == 0)
-			{
-				printf("%ld\n", ft_atol(argv[i]));
-				printf("%d\n", ft_isdigit(argv[i][j]));
-				if (ft_atol(argv[i]) == 0 && i == 5)
-					return (0);
-				error_and_exit("2Wrong input");
-			}
+			if (!ft_isdigit(argv[i][j]) || (ft_atol(argv[i]) == 0 && i != 5))
+				error_and_exit("Wrong input");
 			j++;
 		}
 		i++;
@@ -37,6 +31,21 @@ int check_args(char **argv)
 	return (0);
 }
 
+// cuando solo hay un filósofo tiene que coger el único tenedor que tiene y esperar hasta morirse :(
+void	one_philo(t_philo *philo)
+{
+	//coge tenedor
+	pthread_mutex_lock(&philo->table->forks->fork_mtx);
+	print_status(philo, "has obviously taken a fork");
+	//espera hasta la muerte
+	my_usleep(philo->table->time_die);
+	//muerto
+	pthread_mutex_lock(&philo->table->deadlock);
+	philo->table->end = 1;
+	print_dead(philo);
+	pthread_mutex_unlock(&philo->table->deadlock);
+	pthread_mutex_unlock(&philo->table->forks->fork_mtx);
+}
 /*
 initialize_simulation()
 	initialize mutexes
@@ -56,6 +65,11 @@ int main(int argc, char **argv)
 		//parsing and filling a table
 		check_args(argv);
 		var_init(argv, &table);
+		if (argc == 6 && table.min_meals == 0)
+        {
+            printf("Philosophers don't need to eat, so they leave\n");
+            return (0);
+        }
 		init_mutex(&table);
 		//initing philos
 		init_philos(&table);
@@ -66,4 +80,5 @@ int main(int argc, char **argv)
 	}
 	else
 		error_and_exit("1Wrong input");
+	return 0;
 }

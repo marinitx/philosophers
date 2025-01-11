@@ -20,7 +20,6 @@ long long get_time(void)
 
 int	ft_isdigit(int a)
 {
-	printf("es digito? %d\n", a);
 	if (a > 47 && a < 58)
 		return (1);
 	else
@@ -72,6 +71,12 @@ void print_status(t_philo *philo, char *msg)
 	pthread_mutex_unlock(philo->printlock);
 }
 
+void print_dead(t_philo *philo)
+{
+	pthread_mutex_lock(philo->printlock);
+	printf("%lld philo %d %s\n", get_time() - philo->table->start, philo->id, "has died");
+}
+
 void cleanup(t_table *table)
 {
 	int	i;
@@ -87,5 +92,4 @@ void cleanup(t_table *table)
 	}
 	free(table->forks);
 	free(table->philos);
-	printf("limpieza hecha clean clean\n");
 }

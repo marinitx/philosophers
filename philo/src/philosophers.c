@@ -15,14 +15,14 @@ void start_simulation(t_table *table)
 
 	i = 0;
 	table->start = get_time();
-	// if (table->min_meals == 0)
-	// 	return ; //volver al main y limpiar la mesa
-	// else if (table->num_philo == 1)
-	// 	// hacer esto ****
-	// 	printf("hola");
-	// else
-	// {
-		//crear hilo extra para el vigilante!! el vigilante busca muertos
+	if (table->num_philo == 1)
+	{
+		one_philo(&table->philos[0]);
+		return ;
+	}
+	//crear hilo extra para el vigilante!! el vigilante busca muertos
+	else
+	{
 		if (pthread_create(&monitor, NULL, &life_check, table) != 0)
 			return ;
 		while (i < table->num_philo)
@@ -52,7 +52,7 @@ void start_simulation(t_table *table)
 			}
 			i++;
 		}
-	// }
+	}
 	return ;
 }
 
@@ -95,14 +95,13 @@ int check_death(t_philo *philo)
 		pthread_mutex_unlock(philo->meallock);
 		table->end = 1;
 		pthread_mutex_unlock(philo->deadlock);
-		print_status(philo, "died");
+		print_dead(philo);
 		return 1;
 	}
 	pthread_mutex_unlock(philo->meallock);
 	pthread_mutex_unlock(philo->deadlock);
 	return 0;
 }
-
 
 int check_meals(t_philo *philo)
 {
@@ -113,18 +112,15 @@ int check_meals(t_philo *philo)
 	i = 0;
 	count = 0;
 	table = philo->table;
-	if (table->min_meals == 0)
+	if (table->min_meals == -1)
 		return 0;
-	
 	while (i < table->num_philo)
 	{
 		pthread_mutex_lock(philo->meallock);
 		if (table->philos[i].meals_eaten >= table->min_meals)
-		{
 			count++;
-			i++;
-		}
 		pthread_mutex_unlock(philo->meallock);
+		i++;
 	}
 
 	if (count == table->num_philo)

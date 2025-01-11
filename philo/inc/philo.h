@@ -65,6 +65,7 @@ void start_simulation(t_table *table);
 void *philo_routine(void *arg);
 void    *life_check(void *arg);
 int	isdead(t_philo *philo);
+void	one_philo(t_philo *philo);
 
 /* utils functions */
 long ft_atol(const char *str);
@@ -74,6 +75,7 @@ long long get_time(void);
 int	my_usleep(size_t ms);
 void    print_status(t_philo *philo, char *msg);
 void cleanup(t_table *table);
+void print_dead(t_philo *philo);
 
 /* actions functions */
 void    ft_think(t_philo *philo);
