@@ -1,44 +1,53 @@
-#include "../inc/philo.h"
-//Definir las acciones que llevan a cabo todos los filósofos
-// Comer, dormir, pensar
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   actions.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mhiguera <mhiguera@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/01/12 15:51:55 by mhiguera          #+#    #+#             */
+/*   Updated: 2025/01/12 15:55:01 by mhiguera         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-void    *philo_routine(void *arg)
+#include "../inc/philo.h"
+
+void	*philo_routine(void *arg)
 {
-	t_philo *philo;
+	t_philo	*philo;
 
 	philo = (t_philo *)arg;
 	if (philo->id % 2 == 0)
 		my_usleep(1);
-
 	while (1)
 	{
 		if (isdead(philo))
-			return NULL;
+			return (NULL);
 		ft_think(philo);
 		if (isdead(philo))
-			return NULL;
+			return (NULL);
 		ft_eat(philo);
 		if (isdead(philo))
-			return NULL;
+			return (NULL);
 		ft_sleep(philo);
 	}
-	return arg;
+	return (arg);
 }
 
-void    ft_think(t_philo *philo)
+void	ft_think(t_philo *philo)
 {
 	print_status(philo, "is thinking");
 }
 
-void    ft_eat(t_philo *philo)
+void	ft_eat(t_philo *philo)
 {
 	if (isdead(philo))
-		return;
+		return ;
 	pthread_mutex_lock(&philo->first_fork->fork_mtx);
 	if (isdead(philo))
 	{
 		pthread_mutex_unlock(&philo->first_fork->fork_mtx);
-		return;
+		return ;
 	}
 	print_status(philo, "has taken a fork");
 	pthread_mutex_lock(&philo->second_fork->fork_mtx);
@@ -46,7 +55,7 @@ void    ft_eat(t_philo *philo)
 	{
 		pthread_mutex_unlock(&philo->first_fork->fork_mtx);
 		pthread_mutex_unlock(&philo->second_fork->fork_mtx);
-		return;
+		return ;
 	}
 	print_status(philo, "has taken a fork");
 	print_status(philo, "is eating");
@@ -59,7 +68,7 @@ void    ft_eat(t_philo *philo)
 	pthread_mutex_unlock(&philo->first_fork->fork_mtx);
 }
 
-void    ft_sleep(t_philo *philo)
+void	ft_sleep(t_philo *philo)
 {
 	print_status(philo, "is sleeping");
 	my_usleep(philo->table->time_sleep);

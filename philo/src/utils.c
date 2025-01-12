@@ -1,19 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mhiguera <mhiguera@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/01/12 15:53:03 by mhiguera          #+#    #+#             */
+/*   Updated: 2025/01/12 16:15:28 by mhiguera         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../inc/philo.h"
-//Auxiliares
 
-/*
-initialize mutexes
-destroy mutexes
-set simulation parameters
-simulation is running?
-free resources
-print everything
-*/
-
-long long get_time(void)
+long long	get_time(void)
 {
-	struct timeval time;
-	
+	struct timeval	time;
+
 	gettimeofday(&time, NULL);
 	return ((time.tv_sec * 1000) + (time.tv_usec / 1000));
 }
@@ -26,10 +28,10 @@ int	ft_isdigit(int a)
 		return (0);
 }
 
-long ft_atol(const char *str)
+long	ft_atol(const char *str)
 {
-	long    num;
-	int     sign;
+	long	num;
+	int		sign;
 
 	num = 0;
 	sign = 1;
@@ -47,7 +49,7 @@ long ft_atol(const char *str)
 	return (num * sign);
 }
 
-int    error_and_exit(const char *error)
+int	error_and_exit(const char *error)
 {
 	printf("%s\n", error);
 	exit (1);
@@ -63,21 +65,24 @@ int	my_usleep(size_t ms)
 	return (0);
 }
 
-void print_status(t_philo *philo, char *msg)
+//too many functions
+void	print_status(t_philo *philo, char *msg)
 {
 	pthread_mutex_lock(philo->printlock);
 	if (!isdead(philo))
-		printf("%lld philo %d %s\n", get_time() - philo->table->start, philo->id, msg);
+		printf("%lld %d %s\n", get_time() - philo->table->start, philo->id, msg); //line too long
 	pthread_mutex_unlock(philo->printlock);
 }
 
-void print_dead(t_philo *philo)
+//too many functions
+void	print_dead(t_philo *philo)
 {
 	pthread_mutex_lock(philo->printlock);
-	printf("%lld philo %d %s\n", get_time() - philo->table->start, philo->id, "has died");
+	printf("%lld %d %s\n", get_time() - philo->table->start, philo->id, "has died"); //line too long
 }
 
-void cleanup(t_table *table)
+//too many functions
+void	cleanup(t_table *table)
 {
 	int	i;
 

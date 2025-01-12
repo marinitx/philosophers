@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   init.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mhiguera <mhiguera@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/01/12 15:52:26 by mhiguera          #+#    #+#             */
+/*   Updated: 2025/01/12 16:42:05 by mhiguera         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../inc/philo.h"
 
-void var_init(char **argv, t_table *table)
+void	var_init(char **argv, t_table *table)
 {
 	table->num_philo = ft_atol(argv[1]);
 	table->time_die = ft_atol(argv[2]);
@@ -12,12 +24,11 @@ void var_init(char **argv, t_table *table)
 		table->min_meals = -1;
 }
 
-void init_mutex(t_table *table)
+void	init_mutex(t_table *table)
 {
-	int i;
+	int	i;
 
 	i = 0;
-	//cuantos forks hay? los mismos que filos
 	table->forks = malloc(sizeof(t_fork) * table->num_philo);
 	if (!table->forks)
 		error_and_exit("Error allocating memory");
@@ -30,47 +41,43 @@ void init_mutex(t_table *table)
 	}
 }
 
-void data_to_philo(t_table *table, t_philo *philo)
+void	data_to_philo(t_table *table, t_philo *philo)
 {
 	philo->deadlock = &table->deadlock;
 	philo->meallock = &table->meallock;
 	philo->printlock = &table->printlock;
 }
 
-void init_philos(t_table *table)
+//fnction has more than 25 lines
+void	init_philos(t_table *table)
 {
-	int i;
+	int	i;
 
 	i = 0;
-	if (pthread_mutex_init(&table->deadlock, NULL) || pthread_mutex_init(&table->meallock, NULL) || pthread_mutex_init(&table->printlock, NULL))
+	if (pthread_mutex_init(&table->deadlock, NULL)
+		|| pthread_mutex_init(&table->meallock, NULL)
+		|| pthread_mutex_init(&table->printlock, NULL))
 		cleanup(table);
-	//crear philos
 	table->philos = malloc(sizeof(t_philo) * table->num_philo);
 	if (!table->philos)
 		error_and_exit("Error allocating memory");
-	while (i < table->num_philo)
+	while (i++ < table->num_philo)
 	{
-	//asignar id a cada uno
 		table->philos[i].id = i + 1;
-	//asignar tenedores
 		if (i % 2 == 0)
 		{
 			table->philos[i].first_fork = &table->forks[i];
-			table->philos[i].second_fork = &table->forks[(i + 1) % table->num_philo];
+			table->philos[i].second_fork = &table->forks[(i + 1) % table->num_philo]; //line too long
 		}
 		else
 		{
-			table->philos[i].first_fork = &table->forks[(i + 1) % table->num_philo];
+			table->philos[i].first_fork = &table->forks[(i + 1) % table->num_philo]; //line too long
 			table->philos[i].second_fork = &table->forks[i];
 		}
-	//establecer meals_eaten (ninguna porque no han comido)
 		table->philos[i].meals_eaten = 0;
-	//establecer last_meal a start
 		table->philos[i].last_meal = get_time();
-	//asignar la referencia a la mesa principal
 		table->philos[i].table = table;
 		data_to_philo(table, &table->philos[i]);
-		i++;
 	}
 	table->end = 0;
 }
