@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mhiguera <mhiguera@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mhiguera <mhiguera@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 16:20:00 by mhiguera          #+#    #+#             */
-/*   Updated: 2025/01/12 16:41:43 by mhiguera         ###   ########.fr       */
+/*   Updated: 2025/01/17 19:58:36 by mhiguera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,8 @@ void	*philo_routine(void *arg);
 void	*life_check(void *arg);
 int		isdead(t_philo *philo);
 void	one_philo(t_philo *philo);
+int		check_meals(t_philo *philo);
+int		check_death(t_philo *philo);
 
 /* utils functions */
 long	ft_atol(const char *str);

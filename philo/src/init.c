@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mhiguera <mhiguera@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mhiguera <mhiguera@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 15:52:26 by mhiguera          #+#    #+#             */
-/*   Updated: 2025/01/12 16:42:05 by mhiguera         ###   ########.fr       */
+/*   Updated: 2025/01/17 19:51:21 by mhiguera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,24 @@ void	data_to_philo(t_table *table, t_philo *philo)
 	philo->printlock = &table->printlock;
 }
 
-//fnction has more than 25 lines
+void	assign_forks(t_table *table, int i)
+{
+	if (i % 2 == 0)
+	{
+		table->philos[i].first_fork = &table->forks[i];
+		table->philos[i].second_fork = &table->forks[(i + 1) 
+			% table->num_philo];
+	}
+	else
+	{
+		table->philos[i].first_fork = &table->forks[(i + 1) 
+			% table->num_philo];
+		table->philos[i].second_fork = &table->forks[i];
+	}
+	table->philos[i].meals_eaten = 0;
+	table->philos[i].last_meal = get_time();
+}
+
 void	init_philos(t_table *table)
 {
 	int	i;
@@ -61,23 +78,13 @@ void	init_philos(t_table *table)
 	table->philos = malloc(sizeof(t_philo) * table->num_philo);
 	if (!table->philos)
 		error_and_exit("Error allocating memory");
-	while (i++ < table->num_philo)
+	while (i < table->num_philo)
 	{
 		table->philos[i].id = i + 1;
-		if (i % 2 == 0)
-		{
-			table->philos[i].first_fork = &table->forks[i];
-			table->philos[i].second_fork = &table->forks[(i + 1) % table->num_philo]; //line too long
-		}
-		else
-		{
-			table->philos[i].first_fork = &table->forks[(i + 1) % table->num_philo]; //line too long
-			table->philos[i].second_fork = &table->forks[i];
-		}
-		table->philos[i].meals_eaten = 0;
-		table->philos[i].last_meal = get_time();
+		assign_forks(table, i);
 		table->philos[i].table = table;
 		data_to_philo(table, &table->philos[i]);
+		i++;
 	}
 	table->end = 0;
 }

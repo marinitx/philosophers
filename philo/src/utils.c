@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mhiguera <mhiguera@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mhiguera <mhiguera@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 15:53:03 by mhiguera          #+#    #+#             */
-/*   Updated: 2025/01/12 16:15:28 by mhiguera         ###   ########.fr       */
+/*   Updated: 2025/01/17 19:44:56 by mhiguera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,38 +63,4 @@ int	my_usleep(size_t ms)
 	while ((get_time() - start) < ms)
 		usleep(500);
 	return (0);
-}
-
-//too many functions
-void	print_status(t_philo *philo, char *msg)
-{
-	pthread_mutex_lock(philo->printlock);
-	if (!isdead(philo))
-		printf("%lld %d %s\n", get_time() - philo->table->start, philo->id, msg); //line too long
-	pthread_mutex_unlock(philo->printlock);
-}
-
-//too many functions
-void	print_dead(t_philo *philo)
-{
-	pthread_mutex_lock(philo->printlock);
-	printf("%lld %d %s\n", get_time() - philo->table->start, philo->id, "has died"); //line too long
-}
-
-//too many functions
-void	cleanup(t_table *table)
-{
-	int	i;
-
-	i = 0;
-	pthread_mutex_destroy(&table->meallock);
-	pthread_mutex_destroy(&table->printlock);
-	pthread_mutex_destroy(&table->deadlock);
-	while (i < table->num_philo)
-	{
-		pthread_mutex_destroy(&table->forks[i].fork_mtx);
-		i++;
-	}
-	free(table->forks);
-	free(table->philos);
 }
