@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   print.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mhiguera <mhiguera@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: mhiguera <mhiguera@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 19:54:40 by mhiguera          #+#    #+#             */
-/*   Updated: 2025/01/17 19:55:32 by mhiguera         ###   ########.fr       */
+/*   Updated: 2025/01/19 10:32:13 by mhiguera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	print_status(t_philo *philo, char *msg)
 	pthread_mutex_lock(philo->printlock);
 	if (!isdead(philo))
 		printf("%lld %d %s\n", get_time() - philo->table->start,
-            philo->id, msg);
+			philo->id, msg);
 	pthread_mutex_unlock(philo->printlock);
 }
 
@@ -25,8 +25,8 @@ void	print_dead(t_philo *philo)
 {
 	pthread_mutex_lock(philo->printlock);
 	printf("%lld %d %s\n", get_time() - philo->table->start,
-        philo->id, "has died");
-    pthread_mutex_unlock(philo->printlock);
+		philo->id, "has died");
+	pthread_mutex_unlock(philo->printlock);
 }
 
 void	cleanup(t_table *table)
@@ -45,4 +45,3 @@ void	cleanup(t_table *table)
 	free(table->forks);
 	free(table->philos);
 }
-

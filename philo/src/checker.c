@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   checker.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mhiguera <mhiguera@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: mhiguera <mhiguera@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 19:56:32 by mhiguera          #+#    #+#             */
-/*   Updated: 2025/01/17 19:57:05 by mhiguera         ###   ########.fr       */
+/*   Updated: 2025/01/19 10:32:45 by mhiguera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/philo.h"
-
 
 int	check_death(t_philo *philo)
 {

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   monitor.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mhiguera <mhiguera@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: mhiguera <mhiguera@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 15:52:57 by mhiguera          #+#    #+#             */
-/*   Updated: 2025/01/17 19:56:49 by mhiguera         ###   ########.fr       */
+/*   Updated: 2025/01/19 10:31:28 by mhiguera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	create_threads(t_table *table)
 	while (i < table->num_philo)
 	{
 		if (pthread_create(&table->philos[i].thread_id, NULL, &philo_routine,
-			&table->philos[i]) != 0)
+				&table->philos[i]) != 0)
 		{
 			cleanup(table);
 			error_and_exit("Error creating threads");

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mhiguera <mhiguera@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: mhiguera <mhiguera@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 16:20:00 by mhiguera          #+#    #+#             */
-/*   Updated: 2025/01/17 19:58:36 by mhiguera         ###   ########.fr       */
+/*   Updated: 2025/01/19 12:06:24 by mhiguera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@
 
 typedef pthread_mutex_t	t_type_mtx;
 typedef struct s_table	t_table;
+typedef long long		t_ll;
 
 //FORK
 typedef struct s_fork
@@ -68,16 +69,10 @@ struct s_table
 
 /* MAIN FUNCTIONS */
 void	var_init(char **argv, t_table *table);
-int		check_args(char **argv);
 void	init_mutex(t_table *table);
 void	init_philos(t_table *table);
 void	start_simulation(t_table *table);
-void	*philo_routine(void *arg);
-void	*life_check(void *arg);
-int		isdead(t_philo *philo);
 void	one_philo(t_philo *philo);
-int		check_meals(t_philo *philo);
-int		check_death(t_philo *philo);
 
 /* utils functions */
 long	ft_atol(const char *str);
@@ -87,7 +82,15 @@ int		my_usleep(size_t ms);
 void	print_status(t_philo *philo, char *msg);
 void	cleanup(t_table *table);
 void	print_dead(t_philo *philo);
-long long	get_time(void); //misaligned ??
+t_ll	get_time(void);
+
+/* check functions */
+int		check_args(char **argv);
+void	*philo_routine(void *arg);
+void	*life_check(void *arg);
+int		isdead(t_philo *philo);
+int		check_meals(t_philo *philo);
+int		check_death(t_philo *philo);
 
 /* actions functions */
 void	ft_think(t_philo *philo);

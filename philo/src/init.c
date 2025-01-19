@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mhiguera <mhiguera@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: mhiguera <mhiguera@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 15:52:26 by mhiguera          #+#    #+#             */
-/*   Updated: 2025/01/17 19:51:21 by mhiguera         ###   ########.fr       */
+/*   Updated: 2025/01/19 10:31:05 by mhiguera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,12 +53,12 @@ void	assign_forks(t_table *table, int i)
 	if (i % 2 == 0)
 	{
 		table->philos[i].first_fork = &table->forks[i];
-		table->philos[i].second_fork = &table->forks[(i + 1) 
+		table->philos[i].second_fork = &table->forks[(i + 1)
 			% table->num_philo];
 	}
 	else
 	{
-		table->philos[i].first_fork = &table->forks[(i + 1) 
+		table->philos[i].first_fork = &table->forks[(i + 1)
 			% table->num_philo];
 		table->philos[i].second_fork = &table->forks[i];
 	}
