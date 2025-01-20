@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   routine.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mhiguera <mhiguera@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mhiguera <mhiguera@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 19:56:02 by mhiguera          #+#    #+#             */
-/*   Updated: 2025/01/19 10:32:30 by mhiguera         ###   ########.fr       */
+/*   Updated: 2025/01/20 12:45:42 by mhiguera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,16 @@ void	*philo_routine(void *arg)
 
 void	ft_think(t_philo *philo)
 {
+	int think_time;
+	
 	print_status(philo, "is thinking");
+	think_time = ((philo->table->time_die - philo->table->time_eat 
+		- philo->table->time_sleep) / 4);
+	if (think_time < 1)
+		think_time = 1;
+	else if (think_time > 100)
+		think_time = 100;
+	my_usleep(think_time);
 }
 
 void	ft_eat(t_philo *philo)
